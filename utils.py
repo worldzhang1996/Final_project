@@ -98,13 +98,12 @@ def distance_evaluate(distance_model,criterion,distance_loader_valid,device = "c
         if not np.isnan(loss.item()):
             total_loss += loss.item()/total
             #print(total_loss,loss.item(),total)
-    
     return total_loss
 
 ###### time ########
 def init_time(exp,distance_model):
-    distance = pd.read_csv(exp.distance_path).iloc[:100000]
-    time = pd.read_csv(exp.time_path).iloc[:100000]
+    distance = pd.read_csv(exp.distance_path)
+    time = pd.read_csv(exp.time_path)
     distance_inputs = distance[distance_x].values
     distance_labels = distance[distance_y].values.reshape(-1,1)
 
