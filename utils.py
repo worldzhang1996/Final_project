@@ -141,7 +141,7 @@ def init_time(exp,distance_model):
     return time_model,optimizer,criterion,time_loader_train,time_loader_valid
 
     
-def time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid,device = "cpu"):
+def time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid,device = "cpu",eval_metric = "MSE"):
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     columns = ["epoch","samples","train_loss","valid_loss"]
     log = pd.DataFrame(columns=columns)
@@ -161,7 +161,8 @@ def time_train(time_model,optimizer,criterion,time_loader_train,time_loader_vali
             optimizer.step()
 
             if (i+1)%100 ==0:
-                valid_loss = time_evaluate(time_model,criterion,time_loader_valid)
+                eval_criterion = torch.nn.MSELoss(reduce = True,size_average = True) if eval_metric=="MSE" else torch.nn.L1Loss(size_average=True,reduce=True,reduction='mean')
+                valid_loss = time_evaluate(time_model,eval_criterion,time_loader_valid)
                 print("In epoch {} and {} samples, train loss is {}, valid loss is {} ".format((epoch+1),(i+1),loss.item(),valid_loss))
                 log = pd.DataFrame({"epoch":[epoch+1],"samples":[i+1],"train_loss":[loss.item()],"valid_loss":[valid_loss]},columns = ["epoch","samples","train_loss","valid_loss"])
                 path = "./log/time_"+timestamp+".csv"
