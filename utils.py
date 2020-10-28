@@ -9,9 +9,57 @@ import random
 import os
 distance_x = ['pickup_longitude', 'pickup_latitude', 'dropoff_longitude','dropoff_latitude']
 distance_y = 'trip_distance'
-# time先不写
-# time_x = 'pickup_datetime'
-# provide the utils function
+
+def gen_distance_dataset(path,normalize = None):
+    base_path = path[:-4]
+    data = pd.read_csv(path)
+    # deal with distance
+    names = ["medallion","hack_license","pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude","trip_distance"]
+    distance = data[names]
+    if normalize:
+        final_path = base_path+"_normalized"+"_distance_trip.csv"
+        names = ["pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude","trip_distance"]
+        for name in names:
+            x_max = distance[name].max()
+            x_min = distance[name].max()
+            distance[name] = (distance[name]-x_min)/(x_max-x_min)
+    else:
+        final_path = base_path+"_distance_trip.csv"
+    distance.to_csv(final_path)
+    
+def gen_time_dataset(path,normalize = None):
+    base_path = path[:-4]
+    data = pd.read_csv(path)
+    # deal with Time
+    names = ["medallion","hack_license","pickup_datetime","dropoff_datetime","pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude"]
+    times = data[names]
+    times["trip_period"] = pd.to_datetime(times["dropoff_datetime"])-pd.to_datetime(times["pickup_datetime"])
+    del times["dropoff_datetime"]
+    times["trip_period"] = times["trip_period"].dt.total_seconds()
+    min_date = pd.to_datetime(times["pickup_datetime"]).min()
+    times["pickup_datetime"] = pd.to_datetime(times["pickup_datetime"])-min_date
+    min_date = pd.to_datetime(times["pickup_datetime"]).min()
+    times["pickup_datetime"] = pd.to_datetime(times["pickup_datetime"])-min_date
+    times["pickup_datetime"] = times["pickup_datetime"].dt.total_seconds()
+    x_max = times["pickup_datetime"].max()
+    x_min = times["pickup_datetime"].min()
+    times["pickup_datetime"] = (times["pickup_datetime"]-x_min)/(x_max-x_min)
+    
+    if normalize:
+        final_path = base_path+"_normalized"+"_time_trip.csv"
+        names = ["pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude"]
+        for name in names:
+            x_max = times[name].max()
+            x_min = times[name].min()
+            times[name] = (times[name]-x_min)/(x_max-x_min)
+    else:
+        final_path = base_path+"time_trip.csv"
+    times.to_csv(final_path)
+
+def prepare_data(path): 
+    gen_distance_dataset(path,normalize = True)
+    gen_time_dataset(path,normalize = True)
+
 def random_seed(seed = 42):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
