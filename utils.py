@@ -203,4 +203,4 @@ if __name__=="__main__":
     #print(valid_loss)
     #distance_model = DistModule()
     #time_model,optimizer,criterion,time_loader_train,time_loader_valid = init_time(exp,distance_model)
-    #time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid)
+    #time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid,eval_metric = "MAE")
