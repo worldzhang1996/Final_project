@@ -164,7 +164,7 @@ def time_train(time_model,optimizer,criterion,time_loader_train,time_loader_vali
                 eval_criterion = torch.nn.MSELoss(reduce = True,size_average = True) if eval_metric=="MSE" else torch.nn.L1Loss(size_average=True,reduce=True,reduction='mean')
                 valid_loss = time_evaluate(time_model,eval_criterion,time_loader_valid)
                 print("In epoch {} and {} samples, train loss is {}, valid loss is {} ".format((epoch+1),(i+1),loss.item(),valid_loss))
-                log = pd.DataFrame({"epoch":[epoch+1],"samples":[i+1],"train_loss":[loss.item()],"valid_loss":[valid_loss]},columns = ["epoch","samples","train_loss","valid_loss"])
+                log = pd.DataFrame({"epoch":[epoch+1],"samples":[i+1],"train_loss":[loss.item()],"valid_loss_"+eval_metric:[valid_loss]},columns = ["epoch","samples","train_loss","valid_loss"])
                 path = "./log/time_"+timestamp+".csv"
                 if i+1==100:
                     log.to_csv(path,mode="a",index = False,header = True)
