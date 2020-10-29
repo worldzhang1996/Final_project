@@ -12,7 +12,7 @@ def main(exp):
     
     # time
     time_model,optimizer,criterion,time_loader_train,time_loader_valid = init_time(exp,distance_model)
-    time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid)
+    time_train(exp,time_model,optimizer,criterion,time_loader_train,time_loader_valid)
 
 
 if __name__=="__main__":

@@ -195,7 +195,7 @@ def init_time(exp,distance_model):
     return time_model,optimizer,criterion,time_loader_train,time_loader_valid
 
     
-def time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid,device = "cpu",eval_metric = "MSE"):
+def time_train(exp,time_model,optimizer,criterion,time_loader_train,time_loader_valid,device = "cpu",eval_metric = "MSE"):
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     columns = ["epoch","samples","train_loss","valid_loss"]
     log = pd.DataFrame(columns=columns)
