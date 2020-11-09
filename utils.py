@@ -80,14 +80,17 @@ def gen_distance_dataset(path, normalize=None):
     data = pd.read_csv(path)
     data = pregen_dis_time_dataset(data)
     # deal with distance
+    data['geodistance'] = data.apply(
+        lambda row: geodistance(row['pickup_longitude'], row['pickup_latitude'], row['dropoff_longitude'],
+                                row['dropoff_latitude']), axis=1)
+
     names = ["pickup_longitude", "pickup_latitude", "dropoff_longitude", "dropoff_latitude", "geodistance",
              "trip_distance"]
     distance = data[names]
+    distance, mm_list = distance_mapping(distance)
 
     if normalize:
         final_path = base_path + "_normalized" + "_distance_trip.csv"
-        # distance = drop_na(distance,['dropoff_longitude'])
-        distance, mm_list = distance_mapping(distance)
         # names = ["pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude","geodistance"]
         names = ['pickup_longitude_bin', 'pickup_latitude_bin', 'dropoff_longitude_bin', 'dropoff_latitude_bin',
                  'geodistance']
@@ -98,8 +101,6 @@ def gen_distance_dataset(path, normalize=None):
 
     else:
         final_path = base_path + "_distance_trip.csv"
-        distance = drop_na(distance, ['dropoff_longitude'])
-        # distance,mm_list = distance_mapping(distance)
     print("distance_dataset： ", final_path)
     distance.to_csv(final_path, index=False)
 
