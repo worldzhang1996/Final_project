@@ -261,6 +261,7 @@ def distance_evaluate(distance_model, criterion, distance_loader_valid,
             total_loss += loss.item() / total
     distance_model.train()
     return total_loss
+    
 ###### time ########
 from tqdm import tqdm
 def init_time(exp,distance_model):
@@ -408,3 +409,5 @@ if __name__=="__main__":
     #distance_model = DistModule()
     #time_model,optimizer,criterion,time_loader_train,time_loader_valid = init_time(exp,distance_model)
     #time_train(time_model,optimizer,criterion,time_loader_train,time_loader_valid,eval_metric = "MAE")
+    #gen_distance_dataset(path = "./data/trip_data_1.csv",normalize = True)
+    gen_time_dataset(path = "./data/trip_data_1.csv",normalize_target = True)
