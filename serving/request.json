@@ -1,0 +1,8 @@
+{
+    "pickup_longitude":41.111,
+     "pickup_latitude":41.111, 
+     "dropoff_longitude":41.111, 
+     "dropoff_latitude":41.111,
+     "geodistance":111,
+     "pickup_datetime": 11
+    }
